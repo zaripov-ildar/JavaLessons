@@ -136,18 +136,27 @@ public class HomeworkApp {
                         firstDiagonalDots = 0,
                         secondDiagonalDots = 0;
                 for (int k = 0; k < DOTS_TO_WIN; k++) {
-                    if (map[i][j+k] == ch)
+                    if (map[i][j+k] == ch){
                         rowDots++;
-                    if (map[j+k][i] == ch)
+                        if (rowDots == DOTS_TO_WIN) return true;
+                    }
+                    else rowDots = 0;
+                    if (map[j+k][i] == ch){
                         columnDots++;
-                    if (map[i+k][j+k] == ch)
+                        if (columnDots == DOTS_TO_WIN) return true;
+                    }
+                    else columnDots = 0;
+                    if (map[i+k][j+k] == ch){
                         firstDiagonalDots++;
-                    if(map[SIZE-1-i-k][j+k] == ch)
+                        if (firstDiagonalDots == DOTS_TO_WIN) return true;
+                    }
+                    else firstDiagonalDots = 0;
+                    if(map[SIZE-1-i-k][j+k] == ch) {
                         secondDiagonalDots++;
+                        if (secondDiagonalDots == DOTS_TO_WIN) return true;
+                    }
+                    else seconDiagonalDots = 0;
                 }
-                if (rowDots == DOTS_TO_WIN || columnDots == DOTS_TO_WIN ||
-                firstDiagonalDots == DOTS_TO_WIN || secondDiagonalDots == DOTS_TO_WIN)
-                    return true;
             }
         }
         return false;
