@@ -119,16 +119,38 @@ public class HomeworkApp {
 
     private static void aiTurn() {
         int x, y;
-        do {
-            x = rnd.nextInt(SIZE);
-            y = rnd.nextInt(SIZE);
+        int cellNumber = findDangerousCell();
+        if (cellNumber > 0) {
+            x = cellNumber / SIZE;
+            y = cellNumber % SIZE;
+        } else {
+            do {
+                x = rnd.nextInt(3);
+                y = rnd.nextInt(3);
+            }
+            while (!isInputValid(x, y));
         }
-        while (!isInputValid(x, y));
         map[x][y] = O_CELL;
         System.out.printf("Компутер сходил на (%d;%d)\n", x + 1, y + 1);
     }
 
+    private static int findDangerousCell() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                if (map[i][j] == EMPTY_CELL) {
+                    char[][] testMap = map.clone();
+                    testMap[i][j] = X_CELL;
+                    if (checkWin(X_CELL, testMap)) return i * 3 + j;
+                }
+            }
+        }
+        return -1;
+    }
+
     private static boolean checkWin(char ch){
+        return checkWin(ch, map);
+    }
+    private static boolean checkWin(char ch, char[][] map) {
         for (int i = 0; i <= SIZE - DOTS_TO_WIN; i++) {
             for (int j = 0; j <= SIZE - DOTS_TO_WIN; j++) {
                 int rowDots = 0,
@@ -136,27 +158,18 @@ public class HomeworkApp {
                         firstDiagonalDots = 0,
                         secondDiagonalDots = 0;
                 for (int k = 0; k < DOTS_TO_WIN; k++) {
-                    if (map[i][j+k] == ch){
+                    if (map[i][j + k] == ch)
                         rowDots++;
-                        if (rowDots == DOTS_TO_WIN) return true;
-                    }
-                    else rowDots = 0;
-                    if (map[j+k][i] == ch){
+                    if (map[j + k][i] == ch)
                         columnDots++;
-                        if (columnDots == DOTS_TO_WIN) return true;
-                    }
-                    else columnDots = 0;
-                    if (map[i+k][j+k] == ch){
+                    if (map[i + k][j + k] == ch)
                         firstDiagonalDots++;
-                        if (firstDiagonalDots == DOTS_TO_WIN) return true;
-                    }
-                    else firstDiagonalDots = 0;
-                    if(map[SIZE-1-i-k][j+k] == ch) {
+                    if (map[SIZE - 1 - i - k][j + k] == ch)
                         secondDiagonalDots++;
-                        if (secondDiagonalDots == DOTS_TO_WIN) return true;
-                    }
-                    else seconDiagonalDots = 0;
                 }
+                if (rowDots == DOTS_TO_WIN || columnDots == DOTS_TO_WIN ||
+                        firstDiagonalDots == DOTS_TO_WIN || secondDiagonalDots == DOTS_TO_WIN)
+                    return true;
             }
         }
         return false;
