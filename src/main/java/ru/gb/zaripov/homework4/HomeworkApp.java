@@ -4,8 +4,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class HomeworkApp {
-    private static final int SIZE = 5;
-    private static int DOTS_TO_WIN = 4;
+    private static final int SIZE = 9;
+    private static final int DOTS_TO_WIN = 4;
     private static final char EMPTY_CELL = '.';
     private static final char X_CELL = 'X';
     private static final char O_CELL = 'O';
@@ -20,24 +20,21 @@ public class HomeworkApp {
             humanTurn();
             printMap();
             if (checkWin(X_CELL)) {
-                System.out.println("Победил человек!!!");
+                System.out.println("The human won");
                 break;
             }
             if (isMapFull()) {
-                System.out.println("Ничья");
+                System.out.println("Draw");
                 break;
             }
-            int temp = DOTS_TO_WIN;
-            DOTS_TO_WIN = 3;
             aiTurn();
-            DOTS_TO_WIN = temp;
             printMap();
             if (checkWin(O_CELL)) {
-                System.out.println("Победил компутер!!!");
+                System.out.println("The computer won");
                 break;
             }
             if (isMapFull()) {
-                System.out.println("Ничья");
+                System.out.println("Draw");
                 break;
             }
         }
@@ -55,7 +52,7 @@ public class HomeworkApp {
     }
 
     private static void printMap() {
-        System.out.print(" ");
+        System.out.print("  ");
         for (int i = 1; i <= SIZE; i++) {
             System.out.print(i + " ");
         }
@@ -72,12 +69,12 @@ public class HomeworkApp {
     private static void humanTurn() {
         int x, y;
         do {
-            System.out.println("Введите X и Y");
+            System.out.println("Input X & Y");
             x = scanner.nextInt() - 1;
             y = scanner.nextInt() - 1;
         }
-        while (!isInputValid(x, y));
-        map[x][y] = X_CELL;
+        while (!isInputValid(y, x));
+        map[y][x] = X_CELL;
     }
 
     private static boolean isInputValid(int x, int y) {
@@ -110,7 +107,7 @@ public class HomeworkApp {
             while (!isInputValid(x, y));
         }
         map[x][y] = O_CELL;
-        System.out.printf("Компутер сходил на (%d;%d)\n", x + 1, y + 1);
+        System.out.printf("The computer's move is (%d;%d)\n", y + 1, x + 1);
     }
 
     private static int findDangerousCell() {
@@ -119,7 +116,11 @@ public class HomeworkApp {
                 if (map[i][j] == EMPTY_CELL) {
                     char[][] testMap = deepCopyArray(map);
                     testMap[i][j] = X_CELL;
-                    if (checkWin(X_CELL, testMap)) return i * SIZE + j;
+                    for (int dangerousLineSize = DOTS_TO_WIN; dangerousLineSize > 2; dangerousLineSize--) {
+                        if (checkWin(X_CELL, testMap, dangerousLineSize))
+                            return i * SIZE + j;
+                    }
+
                 }
             }
         }
@@ -136,19 +137,19 @@ public class HomeworkApp {
     }
 
     private static boolean checkWin(char ch) {
-        return checkWin(ch, map);
+        return checkWin(ch, map, DOTS_TO_WIN);
     }
 
-    private static boolean checkWin(char ch, char[][] map) {
+    private static boolean checkWin(char ch, char[][] map, int DOTS_TO_WIN) {
         for (int i = 0; i <= SIZE - DOTS_TO_WIN; i++) {
             for (int j = 0; j <= SIZE - DOTS_TO_WIN; j++) {
-                if (checkSubMap(i, j, ch, map)) return true;
+                if (checkSubMap(i, j, ch, map, DOTS_TO_WIN)) return true;
             }
         }
         return false;
     }
 
-    private static boolean checkSubMap(int x, int y, char ch, char[][] map) {
+    private static boolean checkSubMap(int x, int y, char ch, char[][] map, int DOTS_TO_WIN) {
         boolean diag1 = true,
                 diag2 = true;
         for (int i = x; i < x + DOTS_TO_WIN; i++) {
@@ -159,8 +160,8 @@ public class HomeworkApp {
                 column &= map[j][i] == ch;
             }
             if (row || column) return true;
-            diag1 &= map[i][i] == ch;
-            diag2 &= map[SIZE - 1 - i][i] == ch;
+            diag1 &= map[i][y - x + i] == ch;
+            diag2 &= map[DOTS_TO_WIN + x - 1 - (i - x)][y - x + i] == ch;
         }
         return diag1 || diag2;
     }
