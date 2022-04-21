@@ -1,18 +1,17 @@
 package ru.gb.zaripov.homework4;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
 public class HomeworkApp {
-    private static final int SIZE = 3;
-    private static final int DOTS_TO_WIN = 3;
+    private static final int SIZE = 5;
+    private static int DOTS_TO_WIN = 4;
     private static final char EMPTY_CELL = '.';
     private static final char X_CELL = 'X';
     private static final char O_CELL = 'O';
     private static char[][] map;
-    private static Scanner scanner = new Scanner(System.in);
-    private static Random rnd = new Random();
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final Random rnd = new Random();
 
     public static void main(String[] args) {
         mapInit();
@@ -28,7 +27,10 @@ public class HomeworkApp {
                 System.out.println("Ничья");
                 break;
             }
+            int temp = DOTS_TO_WIN;
+            DOTS_TO_WIN = 3;
             aiTurn();
+            DOTS_TO_WIN = temp;
             printMap();
             if (checkWin(O_CELL)) {
                 System.out.println("Победил компутер!!!");
@@ -81,37 +83,14 @@ public class HomeworkApp {
     private static boolean isInputValid(int x, int y) {
         if (x < 0 || y < 0 || x >= SIZE || y >= SIZE)
             return false;
-        if (map[x][y] == EMPTY_CELL)
-            return true;
-        return false;
+        return map[x][y] == EMPTY_CELL;
     }
-
-//    private static boolean checkWin(char ch) {
-//        int firstDiagonalCounter = 0,
-//                secondDiagonalCounter = 0;
-//        for (int i = 0; i < SIZE; i++) {
-//            int rowShCounter = 0,
-//                    columnShCounter = 0;
-//            for (int j = 0; j < SIZE; j++) {
-//                if (map[i][j] == ch)
-//                    rowShCounter++;
-//                if (map[j][i] == ch)
-//                    columnShCounter++;
-//            }
-//            if (rowShCounter == DOTS_TO_WIN || columnShCounter == DOTS_TO_WIN)
-//                return true;
-//            if (map[i][i] == ch)
-//                firstDiagonalCounter++;
-//            if (map[SIZE - 1 - i][i] == ch)
-//                secondDiagonalCounter++;
-//        }
-//        return firstDiagonalCounter == DOTS_TO_WIN || secondDiagonalCounter == DOTS_TO_WIN;
-//    }
 
     private static boolean isMapFull() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                if (map[i][j] == EMPTY_CELL) return false;
+                if (map[i][j] == EMPTY_CELL)
+                    return false;
             }
         }
         return true;
@@ -120,13 +99,13 @@ public class HomeworkApp {
     private static void aiTurn() {
         int x, y;
         int cellNumber = findDangerousCell();
-        if (cellNumber > 0) {
+        if (cellNumber >= 0) {
             x = cellNumber / SIZE;
             y = cellNumber % SIZE;
         } else {
             do {
-                x = rnd.nextInt(3);
-                y = rnd.nextInt(3);
+                x = rnd.nextInt(SIZE);
+                y = rnd.nextInt(SIZE);
             }
             while (!isInputValid(x, y));
         }
@@ -138,41 +117,52 @@ public class HomeworkApp {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if (map[i][j] == EMPTY_CELL) {
-                    char[][] testMap = map.clone();
+                    char[][] testMap = deepCopyArray(map);
                     testMap[i][j] = X_CELL;
-                    if (checkWin(X_CELL, testMap)) return i * 3 + j;
+                    if (checkWin(X_CELL, testMap)) return i * SIZE + j;
                 }
             }
         }
         return -1;
     }
 
-    private static boolean checkWin(char ch){
+    private static char[][] deepCopyArray(char[][] arr) {
+        int len = arr.length;
+        char[][] result = new char[len][len];
+        for (int i = 0; i < len; i++) {
+            System.arraycopy(arr[i], 0, result[i], 0, len);
+        }
+        return result;
+    }
+
+    private static boolean checkWin(char ch) {
         return checkWin(ch, map);
     }
+
     private static boolean checkWin(char ch, char[][] map) {
         for (int i = 0; i <= SIZE - DOTS_TO_WIN; i++) {
             for (int j = 0; j <= SIZE - DOTS_TO_WIN; j++) {
-                int rowDots = 0,
-                        columnDots = 0,
-                        firstDiagonalDots = 0,
-                        secondDiagonalDots = 0;
-                for (int k = 0; k < DOTS_TO_WIN; k++) {
-                    if (map[i][j + k] == ch)
-                        rowDots++;
-                    if (map[j + k][i] == ch)
-                        columnDots++;
-                    if (map[i + k][j + k] == ch)
-                        firstDiagonalDots++;
-                    if (map[SIZE - 1 - i - k][j + k] == ch)
-                        secondDiagonalDots++;
-                }
-                if (rowDots == DOTS_TO_WIN || columnDots == DOTS_TO_WIN ||
-                        firstDiagonalDots == DOTS_TO_WIN || secondDiagonalDots == DOTS_TO_WIN)
-                    return true;
+                if (checkSubMap(i, j, ch, map)) return true;
             }
         }
         return false;
+    }
+
+    private static boolean checkSubMap(int x, int y, char ch, char[][] map) {
+        boolean diag1 = true,
+                diag2 = true;
+        for (int i = x; i < x + DOTS_TO_WIN; i++) {
+            boolean row = true,
+                    column = true;
+            for (int j = y; j < y + DOTS_TO_WIN; j++) {
+                row &= map[i][j] == ch;
+                column &= map[j][i] == ch;
+            }
+            if (row || column) return true;
+            diag1 &= map[i][i] == ch;
+            diag2 &= map[SIZE - 1 - i][i] == ch;
+        }
+        return diag1 || diag2;
     }
 
 
