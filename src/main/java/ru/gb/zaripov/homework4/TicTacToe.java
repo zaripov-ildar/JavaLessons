@@ -3,7 +3,7 @@ package ru.gb.zaripov.homework4;
 import java.util.Random;
 import java.util.Scanner;
 
-public class HomeworkApp {
+public class TicTacToe {
     private static final int SIZE = 9;
     private static final int DOTS_TO_WIN = 4;
     private static final char EMPTY_CELL = '.';

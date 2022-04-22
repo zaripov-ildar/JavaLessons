@@ -20,7 +20,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>ru.gb.zaripov.homework4.HomeworkApp</mainClass>
+                            <mainClass>ru.gb.zaripov.homework4.TicTacToe</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
