@@ -12,10 +12,9 @@ public class MineSweeper {
     private static final int CLOSED_CELL = -1;
     private static final int FLAG_CELL = -2;
     private static final int OPEN_CELL = -3;
-
     private static final int HEIGHT = 10;
     private static final int WIDTH = 10;
-    private static final int MINES_AMOUNT = 20;
+    private static final int MINES_AMOUNT = 3;
     private static int[][] map;
 
     public static final String ANSI_RESET = "\u001B[0m";
@@ -28,22 +27,29 @@ public class MineSweeper {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     public static void main(String[] args) {
+        boolean win = false;
         map = initMap();
         int[][] field = initField();
         int x, y;
-        initMap();
         do {
             do {
                 System.out.println("Input letter 'space' number ('space' *)");
                 Scanner sc = new Scanner(System.in);
                 String inp = sc.nextLine().toUpperCase(Locale.ROOT);
                 String[] inpArr = inp.split(" ");
-                if (inpArr.length < 2)
+                try {
+                    y = inpArr[0].charAt(0) - 'A';
+                    x = Integer.parseInt(inpArr[1]) - 1;
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    System.out.println("Wrong input, try again");
                     continue;
-                y = inpArr[0].charAt(0) - 'A';
-                x = Integer.parseInt(inpArr[1]) - 1;
+                }
                 if (inpArr.length == 3 && inpArr[2].equals("*")) {
-                    field[x][y] = FLAG_CELL;
+                    if (field[x][y] == FLAG_CELL)
+                        field[x][y] = CLOSED_CELL;
+                    else
+                        field[x][y] = FLAG_CELL;
                     printArr(field);
                 } else if (isIfInputValid(x, y, field))
                     break;
@@ -53,17 +59,39 @@ public class MineSweeper {
                 printArr(map);
                 drawExplosion();
                 break;
-            }
-//            else if (map[x][y] == EMPTY_CELL)
-//                openEmptyCells();
-            else {
+            } else if (map[x][y] == EMPTY_CELL) {
+                field[x][y] = OPEN_CELL;
+                openEmptyCells(field, x, y);
+            } else {
                 field[x][y] = map[x][y];
-                printArr(field);
+            }
+            printArr(field);
+            win = isWin(field);
+        }
+        while (!win);
+
+        if (win)
+            drawWin();
+    }
+
+
+    private static void openEmptyCells(int[][] field, int x, int y) {
+        int leftBorder = Math.max(0, y - 1);
+        int rightBorder = Math.min(WIDTH, y + 2);
+        int topBorder = Math.max(0, x - 1);
+        int bottomBorder = Math.min(HEIGHT, x + 2);
+        for (int i = topBorder; i < bottomBorder; i++) {
+            for (int j = leftBorder; j < rightBorder; j++) {
+                if (field[i][j] != OPEN_CELL) {
+                    field[i][j] = OPEN_CELL;
+                    if (map[i][j] == EMPTY_CELL)
+                        openEmptyCells(field, i, j);
+                }
             }
         }
-        while (!isWin(field));
     }
-    private static void drawExplosion(){
+
+    private static void drawExplosion() {
         final String colorCode = getColorCode(3);
         System.out.print(colorCode);
         System.out.println("\n" +
@@ -85,10 +113,38 @@ public class MineSweeper {
                 "█████░▀██▀▀░░░░░░░░░▀▀██▀░██████\n" +
                 "██████▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄███████\n" +
                 "████████████████████████████████\n"
-                );
+        );
         System.out.println("You've been exploded!!!");
         System.out.print(ANSI_RESET);
     }
+
+    private static void drawWin() {
+        final String colorCode = getColorCode(100500);
+        System.out.print(colorCode);
+        System.out.println("\n" +
+                "░░░░░░░▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄░░░░░\n" +
+                "░░░▄▄▄▄████████████▀▀█▄▄▄▄░\n" +
+                "░░░█▄░░████████████░░█░░░█░\n" +
+                "░░░░█░░████████████░▄█░░█░░\n" +
+                "░░░░░▀▄░██████████░░█░▄▀░░░\n" +
+                "░░░░░░░▀▀████████▀░█▀▀░░░░░\n" +
+                "░▄░░░░░░░░▀█████▀▄▀░░░░░▄█▄\n" +
+                "▀█▀░░░░░░░░░▀███▀░░░░░░░░▀░\n" +
+                "░░░░░░░▄░░░░░░█░░░░░░░░░░░░\n" +
+                "░░░░░░▀█▀░░░░░█░░░░░░░░░░░░\n" +
+                "░░░░░░░░░░░░░▄█▄░░░░░░░░░░░\n" +
+                "░░░░░░░░░░▄▄▄███▄▄▄░░░░░░░░\n" +
+                "░░░░░░░▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄░░░░░\n" +
+                "░░░░░░░███████████████░░░░░\n" +
+                "░░░░░░░████▀▀▀▀▀▀▀████░░░░░\n" +
+                "░░░░░░░███░░░░░░░░░███░░░░░\n" +
+                "░░░░░░░████▄▄▄▄▄▄▄████░░░░░\n" +
+                "░░░░░░░███████████████░░░░░\n" +
+                "░░░░░▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄░░░\n"
+        );
+        System.out.print(ANSI_RESET);
+    }
+
     private static boolean isIfInputValid(int x, int y, int[][] field) {
         return x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH && field[x][y] != OPEN_CELL;
     }
@@ -199,8 +255,6 @@ public class MineSweeper {
                 return ANSI_CYAN;
             default:
                 return ANSI_YELLOW;
-
-
         }
     }
 
