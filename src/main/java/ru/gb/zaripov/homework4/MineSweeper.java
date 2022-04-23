@@ -27,10 +27,15 @@ public class MineSweeper {
     public static final String ANSI_WHITE = "\u001B[37m";
 
     public static void main(String[] args) {
+        System.out.println("Welcome to Minesweeper!\n" +
+                "to choose a cell input something like:b 3\n" +
+                "to put a flag: b 4 *\n" +
+                "to remove flag input the same command:b 4 *");
         boolean win = false;
         map = initMap();
         int[][] field = initField();
         int x, y;
+        printArr(field);
         do {
             do {
                 System.out.println("Input letter 'space' number ('space' *)");
@@ -40,8 +45,8 @@ public class MineSweeper {
                 try {
                     y = inpArr[0].charAt(0) - 'A';
                     x = Integer.parseInt(inpArr[1]) - 1;
+                    if (y < 0 || y >= WIDTH || x < 0 || x >= HEIGHT) throw new Exception();
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
                     System.out.println("Wrong input, try again");
                     continue;
                 }
@@ -59,12 +64,10 @@ public class MineSweeper {
                 printArr(map);
                 drawExplosion();
                 break;
-            } else if (map[x][y] == EMPTY_CELL) {
-                field[x][y] = OPEN_CELL;
-                openEmptyCells(field, x, y);
-            } else {
-                field[x][y] = map[x][y];
             }
+            field[x][y] = OPEN_CELL;
+            if (map[x][y] == EMPTY_CELL)
+                openEmptyCells(field, x, y);
             printArr(field);
             win = isWin(field);
         }
@@ -152,8 +155,8 @@ public class MineSweeper {
     private static boolean isWin(int[][] field) {
         int openCellCounter = 0;
         for (int[] val : field) {
-            for (int j = 0; j < field[0].length; j++) {
-                if (val[j] == OPEN_CELL)
+            for (int i : val) {
+                if (i == OPEN_CELL)
                     openCellCounter++;
             }
         }
