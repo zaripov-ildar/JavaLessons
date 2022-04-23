@@ -10,6 +10,7 @@ public class TicTacToe {
     private static final char X_CELL = 'X';
     private static final char O_CELL = 'O';
     private static char[][] map;
+    private static final Scanner scanner = new Scanner(System.in);
 
 
     public static void main(String[] args) {
@@ -38,7 +39,7 @@ public class TicTacToe {
             }
         }
         System.out.println("Game over");
-
+        scanner.close();
     }
 
     private static void mapInit() {
@@ -66,7 +67,6 @@ public class TicTacToe {
     }
 
     private static void humanTurn() {
-        Scanner scanner = new Scanner(System.in);
         int x, y;
         do {
             System.out.println("Input X & Y");
@@ -75,13 +75,10 @@ public class TicTacToe {
         }
         while (!isInputValid(y, x));
         map[y][x] = X_CELL;
-        scanner.close();
     }
 
     private static boolean isInputValid(int x, int y) {
-        if (x < 0 || y < 0 || x >= SIZE || y >= SIZE)
-            return false;
-        return map[x][y] == EMPTY_CELL;
+        return (x >= 0 && y >= 0 && x < SIZE && y < SIZE  && map[x][y] == EMPTY_CELL);
     }
 
     private static boolean isMapFull() {
@@ -113,7 +110,7 @@ public class TicTacToe {
     }
 
     private static int findDangerousCell() {
-        for (int dangerousLineSize = DOTS_TO_WIN + 1; dangerousLineSize > 2; dangerousLineSize--) {
+        for (int dangerousLineSize = DOTS_TO_WIN; dangerousLineSize > 1; dangerousLineSize--) {
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     if (map[i][j] == EMPTY_CELL) {
