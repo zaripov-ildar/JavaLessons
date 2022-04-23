@@ -14,7 +14,7 @@ public class MineSweeper {
     private static final int OPEN_CELL = -3;
     private static final int HEIGHT = 10;
     private static final int WIDTH = 10;
-    private static final int MINES_AMOUNT = 3;
+    private static final int MINES_AMOUNT = 7;
     private static int[][] map;
 
     public static final String ANSI_RESET = "\u001B[0m";
@@ -53,7 +53,7 @@ public class MineSweeper {
                 if (inpArr.length == 3 && inpArr[2].equals("*")) {
                     if (field[x][y] == FLAG_CELL)
                         field[x][y] = CLOSED_CELL;
-                    else
+                    else if(field[x][y] == CLOSED_CELL)
                         field[x][y] = FLAG_CELL;
                     printArr(field);
                 } else if (isIfInputValid(x, y, field))
