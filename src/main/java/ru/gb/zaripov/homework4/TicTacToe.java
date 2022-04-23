@@ -10,8 +10,7 @@ public class TicTacToe {
     private static final char X_CELL = 'X';
     private static final char O_CELL = 'O';
     private static char[][] map;
-    private static final Scanner scanner = new Scanner(System.in);
-    private static final Random rnd = new Random();
+
 
     public static void main(String[] args) {
         mapInit();
@@ -39,7 +38,7 @@ public class TicTacToe {
             }
         }
         System.out.println("Game over");
-        scanner.close();
+
     }
 
     private static void mapInit() {
@@ -67,6 +66,7 @@ public class TicTacToe {
     }
 
     private static void humanTurn() {
+        Scanner scanner = new Scanner(System.in);
         int x, y;
         do {
             System.out.println("Input X & Y");
@@ -75,6 +75,7 @@ public class TicTacToe {
         }
         while (!isInputValid(y, x));
         map[y][x] = X_CELL;
+        scanner.close();
     }
 
     private static boolean isInputValid(int x, int y) {
@@ -94,6 +95,7 @@ public class TicTacToe {
     }
 
     private static void aiTurn() {
+        final Random rnd = new Random();
         int x, y;
         int cellNumber = findDangerousCell();
         if (cellNumber >= 0) {
@@ -111,16 +113,15 @@ public class TicTacToe {
     }
 
     private static int findDangerousCell() {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                if (map[i][j] == EMPTY_CELL) {
-                    char[][] testMap = deepCopyArray(map);
-                    testMap[i][j] = X_CELL;
-                    for (int dangerousLineSize = DOTS_TO_WIN; dangerousLineSize > 2; dangerousLineSize--) {
-                        if (checkWin(X_CELL, testMap, dangerousLineSize))
+        for (int dangerousLineSize = DOTS_TO_WIN + 1; dangerousLineSize > 2; dangerousLineSize--) {
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    if (map[i][j] == EMPTY_CELL) {
+                        char[][] plusOneMoveMap = deepCopyArray(map);
+                        plusOneMoveMap[i][j] = X_CELL;
+                        if (checkWin(X_CELL, plusOneMoveMap, dangerousLineSize))
                             return i * SIZE + j;
                     }
-
                 }
             }
         }
@@ -143,27 +144,40 @@ public class TicTacToe {
     private static boolean checkWin(char ch, char[][] map, int DOTS_TO_WIN) {
         for (int i = 0; i <= SIZE - DOTS_TO_WIN; i++) {
             for (int j = 0; j <= SIZE - DOTS_TO_WIN; j++) {
-                if (checkSubMap(i, j, ch, map, DOTS_TO_WIN)) return true;
+                int[][] subMap = createSubMap(i, j, map, DOTS_TO_WIN);
+                if (checkSubMap(subMap, ch)) return true;
             }
         }
         return false;
     }
 
-    private static boolean checkSubMap(int x, int y, char ch, char[][] map, int DOTS_TO_WIN) {
+    private static int[][] createSubMap(int i, int j, char[][] map, int dots_to_win) {
+        int[][] result = new int[dots_to_win][dots_to_win];
+        for (int k = 0; k < dots_to_win; k++) {
+            for (int l = 0; l < dots_to_win; l++) {
+                result[k][l] = map[i + k][l + j];
+            }
+        }
+        return result;
+    }
+
+    private static boolean checkSubMap(int[][] subMap, char ch) {
+        int size = subMap.length;
         boolean diag1 = true,
                 diag2 = true;
-        for (int i = x; i < x + DOTS_TO_WIN; i++) {
+        for (int i = 0; i < size; i++) {
             boolean row = true,
                     column = true;
-            for (int j = y; j < y + DOTS_TO_WIN; j++) {
-                row &= map[i][j] == ch;
-                column &= map[j][i] == ch;
+            for (int j = 0; j < size; j++) {
+                row &= subMap[i][j] == ch;
+                column &= subMap[j][i] == ch;
             }
-            if (row || column) return true;
-            diag1 &= map[i][y - x + i] == ch;
-            diag2 &= map[DOTS_TO_WIN + x - 1 - (i - x)][y - x + i] == ch;
+            if (row || column)
+                return true;
+            diag1 &= subMap[i][i] == ch;
+            diag2 &= subMap[size - 1 - i][i] == ch;
         }
-        return diag1 || diag2;
+        return (diag1 || diag2);
     }
 
 
