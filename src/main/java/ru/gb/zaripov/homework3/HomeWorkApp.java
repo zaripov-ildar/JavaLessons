@@ -4,8 +4,9 @@ import java.util.Arrays;
 
 public class HomeWorkApp {
     public static void main(String[] args) {
-        task_8(new int[]{1,2,3,4,5},-2);
-        task_8(new int[]{1,2,3,4,5},17);
+        shuffleArray(new int[]{1,2,3,4,5},-2);
+        System.out.println();
+        shuffleArray(new int[]{1,2,3,4,5},17);
     }
 
     private static void task_1() {
@@ -87,12 +88,29 @@ public class HomeWorkApp {
         return sum;
     }
 
-    private static void task_8(int [] arr, int n){
-        int step = simplifyStep(n, arr.length);
-        for (int i = 0; i < step; i++) {
-            oneStepForward(arr);
+    private static void shuffleArray(int [] a, int offset){
+        offset = simplifyStep(offset, a.length);
+        if(a.length%offset == 0){
+            for (int i = a.length-1; i>=offset; i--){
+                int c = a[i];
+                a[i] = a[i-offset];
+                a[i-offset] = c;
+                System.out.println(Arrays.toString(a));
+            }
         }
-        System.out.println(Arrays.toString(arr));
+        else {
+            offset %= a.length;
+            int i = 0;
+            int temp1 = a[i];
+            do{
+                i = (i+offset)%a.length;
+                int temp2 = a[i];
+                a[i] = temp1;
+                temp1 = temp2;
+                System.out.println(Arrays.toString(a));
+            }
+            while(i!=0);
+        }
     }
 
     private static int simplifyStep(int n, int len){
@@ -102,15 +120,5 @@ public class HomeWorkApp {
         if (n<0)
             n +=len;
         return n;
-    }
-    
-    private static void oneStepForward(int [] arr){
-        int temp = arr[0];
-        for (int i = 0; i < arr.length-1; i++) {
-            int temp2 = arr[i+1];
-            arr[i+1] = temp;
-            temp = temp2;
-        }
-        arr[0]=temp;
     }
 }
