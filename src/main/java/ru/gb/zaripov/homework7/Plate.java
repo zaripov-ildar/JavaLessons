@@ -7,11 +7,11 @@ public class Plate {
         this.food = food;
     }
 
-    public void decreaseFood(int i) {
+    public void decreaseFood(int hungerLevel) {
 //в проверке нет необходимости т.к. кот не будет есть если
 //ему мало, но такое задание
-        if (food >= i)
-            food -= i;
+        if (food >= hungerLevel)
+            food -= hungerLevel;
     }
 
     public void info() {
