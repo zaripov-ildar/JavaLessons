@@ -7,22 +7,22 @@ public class Plate {
         this.food = food;
     }
 
-    public void decreaseFood(int hungerLevel) {
+    public void decreaseFood(int appetite) {
 //в проверке нет необходимости т.к. кот не будет есть если
 //ему мало, но такое задание
-        if (food >= hungerLevel)
-            food -= hungerLevel;
+        if (food >= appetite)
+            food -= appetite;
     }
 
     public void info() {
-        System.out.printf("В тарелке осталось %d еды\n",food);
+        System.out.printf("В тарелке осталось %d еды\n", food);
     }
 
     public int getFood() {
         return food;
     }
 
-    public void addFood(int i) {
-        food += i;
+    public void addFood(int addedFood) {
+        food += addedFood;
     }
 }
