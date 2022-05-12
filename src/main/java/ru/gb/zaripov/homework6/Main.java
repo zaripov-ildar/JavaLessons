@@ -2,18 +2,19 @@ package ru.gb.zaripov.homework6;
 
 public class Main {
     public static void main(String[] args) {
-        Cat tom = new Cat("Tom");
-        Cat princess = new Cat("Princess");
-        Dog beethoven = new Dog("Beethoven");
-        Dog butch = new Dog("Butch");
-        Dog fang = new Dog("Fang");
+        Animal[] animals = {
+                new Cat("Tom"),
+                new Cat("Princess"),
+                new Dog("Beethoven"),
+                new Dog("Butch"),
+                new Dog("Fang")
+        };
 
-        tom.run(15);
-        princess.swim(10);
 
-        beethoven.run(250);
-        butch.swim(15);
-        fang.swim(5);
+        for (Animal animal : animals) {
+            animal.run(100);
+            animal.swim(20);
+        }
 
         System.out.println("\n*Additional task:");
         System.out.println("Animals amount is " + Animal.getAnimalsAmount());

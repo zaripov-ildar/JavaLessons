@@ -8,7 +8,7 @@ public abstract class Animal {
 
     public void run(int distance) {
         if (runLimit > distance)
-            System.out.printf("%s ran %d m\n",name, distance);
+            System.out.printf("%s ran %d m\n", name, distance);
         else
             System.out.println(name + " can't do it! That is too much");
     }

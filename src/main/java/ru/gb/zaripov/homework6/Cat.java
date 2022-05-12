@@ -1,10 +1,10 @@
 package ru.gb.zaripov.homework6;
 
-public class Cat extends Animal{
+public class Cat extends Animal {
     private static int catsAmount;
 
     public Cat(String name) {
-        super(200, 0,name);
+        super(200, 0, name);
         catsAmount++;
     }
 
