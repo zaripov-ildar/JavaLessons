@@ -2,6 +2,6 @@ package ru.gb.zaripov;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        new Window(10,10);
     }
 }
