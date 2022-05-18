@@ -10,10 +10,10 @@ public class Minesweeper {
     private static int[][] map;
     private static int[][] field;
 
-    private static final int MINE = 9;
-    private static final int EMPTY_CELL = 0;
-    private static final int CLOSED_CELL = -1;
-    private static final int OPEN_CELL = -3;
+    public static final int MINE = 9;
+    public static final int EMPTY_CELL = 0;
+    public static final int CLOSED_CELL = -1;
+    public static final int OPEN_CELL = -3;
 
     public Minesweeper(int HEIGHT, int WIDTH, int MINES_AMOUNT) {
         this.WIDTH = WIDTH;
@@ -87,13 +87,8 @@ public class Minesweeper {
         return HEIGHT;
     }
 
-    public void move(int x, int y) {
-        if (map[x][y] == EMPTY_CELL)
-            openEmptyCells(x, y);
 
-    }
-
-    private void openEmptyCells(int x, int y) {
+    public void openEmptyCells(int x, int y) {
         int leftBorder = Math.max(0, y - 1);
         int rightBorder = Math.min(WIDTH, y + 2);
         int topBorder = Math.max(0, x - 1);
@@ -117,9 +112,14 @@ public class Minesweeper {
         return map[x][y] == MINE;
     }
 
-    public String getCell(int i, int j) {
-        if (map[i][j] == EMPTY_CELL)
-            return " ";
-        else return "" + map[i][j];
+
+
+    public boolean isCellEmpty(int x, int y) {
+        return map[x][y] == EMPTY_CELL;
     }
+
+    public int getCell(int x, int y){
+        return map[x][y];
+    }
+
 }

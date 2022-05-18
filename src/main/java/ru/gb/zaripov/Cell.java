@@ -13,8 +13,11 @@ public class Cell extends JButton {
     private final ImageIcon flag;
     private final ImageIcon grass;
 
+    private final int X_COORDINATE;
+    private final int Y_COORDINATE;
 
-    public Cell(int x, int y, int size) {
+
+    public Cell(int y, int x, int size) {
 //        ImageIcon flag1;
 //        BufferedImage image;
 //        try {
@@ -24,14 +27,14 @@ public class Cell extends JButton {
 //            e.printStackTrace();
 //            flag1 = new ImageIcon();
 //        }
-
+        X_COORDINATE = x;
+        Y_COORDINATE = y;
         flag = new ImageIcon("src/main/resources/flag.jpg");
         grass = new ImageIcon("src/main/resources/grass.jpg");
         this.setIcon(grass);
         isFlagged = false;
         this.size = size;
-        this.setBackground(Color.GRAY);
-        this.setBounds(x,y,x+size,y+size);
+        this.setBounds(x,y,size,size);
         this.setPreferredSize(new Dimension(size,size));
     }
 
@@ -50,5 +53,13 @@ public class Cell extends JButton {
 
     public boolean isFlagged() {
         return isFlagged;
+    }
+
+    public int getX_COORDINATE() {
+        return X_COORDINATE;
+    }
+
+    public int getY_COORDINATE() {
+        return Y_COORDINATE;
     }
 }

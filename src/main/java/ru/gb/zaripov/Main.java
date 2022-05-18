@@ -2,6 +2,6 @@ package ru.gb.zaripov;
 
 public class Main {
     public static void main(String[] args) {
-        new Window(10,10);
+        new Window();
     }
 }
