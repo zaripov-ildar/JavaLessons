@@ -6,10 +6,10 @@ import java.awt.event.*;
 import java.util.Random;
 
 public class Window extends JFrame {
-    private  int WIDTH;
-    private  int HEIGHT;
+    private int WIDTH;
+    private int HEIGHT;
     private final int CELL_SIZE = 30;
-    private  int MINES_AMOUNT;
+    private int MINES_AMOUNT;
     private final int BUTTON_LAYER = 1;
     private final int NUMBER_LAYER = 2;
     private final int IMAGE_LAYER = 0;
@@ -17,7 +17,7 @@ public class Window extends JFrame {
     private final int MIN_X = 10;
     private final int MIN_Y = 10;
     private Minesweeper minesweeper;
-    private  JLayeredPane layeredPane;
+    private JLayeredPane layeredPane;
 
     private Cell[][] cells;
 
@@ -28,8 +28,8 @@ public class Window extends JFrame {
 
     void initiateWindow() {
         Random random = new Random();
-        int width = random.nextInt(5)+ MIN_X;
-        int height = random.nextInt(5) +MIN_Y;
+        int width = random.nextInt(5) + MIN_X;
+        int height = random.nextInt(5) + MIN_Y;
         cells = new Cell[height][width];
         WIDTH = width;
         HEIGHT = height;
@@ -65,7 +65,7 @@ public class Window extends JFrame {
                 ImageIcon bomb = new ImageIcon("src/main/resources/bomb.png");
                 bomb = new ImageIcon(bomb
                         .getImage()
-                        .getScaledInstance(CELL_SIZE,CELL_SIZE, Image.SCALE_SMOOTH));
+                        .getScaledInstance(CELL_SIZE, CELL_SIZE, Image.SCALE_SMOOTH));
                 label = new JLabel(bomb);
 
                 break;
@@ -77,7 +77,7 @@ public class Window extends JFrame {
                 break;
         }
         label.setBounds(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-        layeredPane.add(label,NUMBER_LAYER);
+        layeredPane.add(label, NUMBER_LAYER);
 
     }
 
@@ -122,17 +122,16 @@ public class Window extends JFrame {
     }
 
 
-
     private void reaction(String path) {
         ImageIcon explosion = new ImageIcon(path);
         explosion = new ImageIcon(explosion
                 .getImage()
-                .getScaledInstance(MIN_X*CELL_SIZE, MIN_Y*CELL_SIZE, Image.SCALE_SMOOTH));
+                .getScaledInstance(MIN_X * CELL_SIZE, MIN_Y * CELL_SIZE, Image.SCALE_SMOOTH));
         JLabel label = new JLabel(explosion);
         label.setVisible(true);
-        label.setBounds(0,0,
-                WIDTH*CELL_SIZE,
-                HEIGHT*CELL_SIZE);
+        label.setBounds(0, 0,
+                WIDTH * CELL_SIZE,
+                HEIGHT * CELL_SIZE);
         openAllCells();
         label.addMouseListener(new RestartMouseListener(this, layeredPane));
         layeredPane.add(label, IMAGE_LAYER);

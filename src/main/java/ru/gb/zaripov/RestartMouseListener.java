@@ -5,8 +5,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class RestartMouseListener implements MouseListener {
-    private Window w;
-    private JLayeredPane layeredPane;
+    private final Window w;
+    private final JLayeredPane layeredPane;
 
 
     public RestartMouseListener(Window w, JLayeredPane layeredPane) {

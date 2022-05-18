@@ -113,12 +113,11 @@ public class Minesweeper {
     }
 
 
-
     public boolean isCellEmpty(int x, int y) {
         return map[x][y] == EMPTY_CELL;
     }
 
-    public int getCell(int x, int y){
+    public int getCell(int x, int y) {
         return map[x][y];
     }
 
