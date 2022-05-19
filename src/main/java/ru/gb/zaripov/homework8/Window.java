@@ -1,18 +1,26 @@
-package ru.gb.zaripov;
+package ru.gb.zaripov.homework8;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.util.Random;
 
 public class Window extends JFrame {
+
+    private final String PATH = "src/main/resources/";
     private int WIDTH;
     private int HEIGHT;
     private final int CELL_SIZE = 30;
     private int MINES_AMOUNT;
-    private final int BUTTON_LAYER = 1;
-    private final int NUMBER_LAYER = 2;
-    private final int IMAGE_LAYER = 0;
+    private final int BUTTON_LAYER = 2;
+    private final int NUMBER_LAYER = 3;
+    private final int IMAGE_LAYER = 1;
+
+    private final int MESSAGE_LAYER = 0;
 
     private final int MIN_X = 10;
     private final int MIN_Y = 10;
@@ -23,7 +31,6 @@ public class Window extends JFrame {
 
     public Window() {
         initiateWindow();
-
     }
 
     void initiateWindow() {
@@ -62,7 +69,7 @@ public class Window extends JFrame {
                 label = new JLabel("  ");
                 break;
             case (Minesweeper.MINE):
-                ImageIcon bomb = new ImageIcon("src/main/resources/bomb.png");
+                ImageIcon bomb = new ImageIcon(PATH + "bomb.png");
                 bomb = new ImageIcon(bomb
                         .getImage()
                         .getScaledInstance(CELL_SIZE, CELL_SIZE, Image.SCALE_SMOOTH));
@@ -101,18 +108,19 @@ public class Window extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
+                    makeSound(PATH + "click.wav");
                     if (!cell.isFlagged()) {
                         minesweeper.openCell(i, j);
                         cell.setVisible(false);
                         if (minesweeper.isCellMine(i, j))
-                            reaction("src/main/resources/explosion.png");
+                            reaction(PATH + "explosion.png", PATH + "explosion.wav");
                         if (minesweeper.isCellEmpty(i, j))
                             openCells(i, j);
                         if (minesweeper.isWin())
-                            reaction("src/main/resources/win.png");
-
+                            reaction(PATH + "win.png", PATH + "win.wav");
                     }
                 } else if (e.getButton() == MouseEvent.BUTTON3) {
+                    makeSound(PATH + "flag.wav");
                     cell.setFlagged();
                 }
             }
@@ -121,20 +129,26 @@ public class Window extends JFrame {
         layeredPane.add(cell, BUTTON_LAYER);
     }
 
-
-    private void reaction(String path) {
-        ImageIcon explosion = new ImageIcon(path);
-        explosion = new ImageIcon(explosion
+    private void reaction(String pathToImage, String pathToSound) {
+        ImageIcon reactionImage = new ImageIcon(pathToImage);
+        reactionImage = new ImageIcon(reactionImage
                 .getImage()
                 .getScaledInstance(MIN_X * CELL_SIZE, MIN_Y * CELL_SIZE, Image.SCALE_SMOOTH));
-        JLabel label = new JLabel(explosion);
+        JLabel label = new JLabel(reactionImage);
         label.setVisible(true);
         label.setBounds(0, 0,
                 WIDTH * CELL_SIZE,
                 HEIGHT * CELL_SIZE);
         openAllCells();
+        makeSound(pathToSound);
         label.addMouseListener(new RestartMouseListener(this, layeredPane));
+        JLabel messageClick = new JLabel("Click to continue");
+        messageClick.setBounds(0, getHeight() - 100, getWidth(), 2*CELL_SIZE );
+        messageClick.setFont(new Font("Serif", Font.BOLD, 25));
+        messageClick.setForeground(Color.MAGENTA);
+        layeredPane.add(messageClick, MESSAGE_LAYER);
         layeredPane.add(label, IMAGE_LAYER);
+
     }
 
     private void openAllCells() {
@@ -154,5 +168,15 @@ public class Window extends JFrame {
                     cells[i][j].setVisible(false);
             }
         }
+    }
+
+    private void makeSound(String soundName) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        }
+        catch (Exception ignored){}
     }
 }

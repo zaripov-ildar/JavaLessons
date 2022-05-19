@@ -1,4 +1,4 @@
-package ru.gb.zaripov;
+package ru.gb.zaripov.homework8;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;

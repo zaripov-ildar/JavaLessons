@@ -1,4 +1,4 @@
-package ru.gb.zaripov;
+package ru.gb.zaripov.homework8;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,13 +8,7 @@ public class Cell extends JButton {
     private final ImageIcon flag;
     private final ImageIcon grass;
 
-    private final int X_COORDINATE;
-    private final int Y_COORDINATE;
-
-
     public Cell(int y, int x, int size) {
-        X_COORDINATE = x;
-        Y_COORDINATE = y;
         flag = new ImageIcon("src/main/resources/flag.jpg");
         grass = new ImageIcon("src/main/resources/grass.jpg");
         this.setIcon(grass);
@@ -39,11 +33,4 @@ public class Cell extends JButton {
         return isFlagged;
     }
 
-    public int getX_COORDINATE() {
-        return X_COORDINATE;
-    }
-
-    public int getY_COORDINATE() {
-        return Y_COORDINATE;
-    }
 }

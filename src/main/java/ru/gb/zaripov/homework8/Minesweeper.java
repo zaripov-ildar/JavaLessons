@@ -1,4 +1,4 @@
-package ru.gb.zaripov;
+package ru.gb.zaripov.homework8;
 
 import java.util.Arrays;
 import java.util.Random;
