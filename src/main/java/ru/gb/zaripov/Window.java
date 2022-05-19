@@ -150,8 +150,7 @@ public class Window extends JFrame {
         minesweeper.openEmptyCells(h, w);
         for (int i = 0; i < HEIGHT; i++) {
             for (int j = 0; j < WIDTH; j++) {
-                if (minesweeper.isCellEmpty(i, j) &&
-                        !minesweeper.isCellVisible(i, j))
+                if (!minesweeper.isCellVisible(i, j))
                     cells[i][j].setVisible(false);
             }
         }
