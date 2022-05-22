@@ -41,14 +41,12 @@ public class Window extends JFrame {
         WIDTH = width;
         HEIGHT = height;
         MINES_AMOUNT = (int) (0.1 * WIDTH * HEIGHT);
-        setBounds(100, 100, WIDTH * CELL_SIZE, HEIGHT * CELL_SIZE + 35);
-        setTitle("Minesweeper");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         minesweeper = new Minesweeper(HEIGHT, WIDTH, MINES_AMOUNT);
 
         layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(300, 300));
+        layeredPane.setPreferredSize(new Dimension(WIDTH * CELL_SIZE, HEIGHT * CELL_SIZE));
+
         layeredPane.setLayout(null);
         for (int i = 0; i < HEIGHT; i++) {
             for (int j = 0; j < WIDTH; j++) {
@@ -57,7 +55,14 @@ public class Window extends JFrame {
             }
         }
         layeredPane.setVisible(true);
+
+
+        setTitle("Minesweeper");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         add(layeredPane);
+        setResizable(false);
+        setAlwaysOnTop(true);
+        pack();
         setVisible(true);
     }
 
@@ -143,7 +148,7 @@ public class Window extends JFrame {
         makeSound(pathToSound);
         label.addMouseListener(new RestartMouseListener(this, layeredPane));
         JLabel messageClick = new JLabel("Click to continue");
-        messageClick.setBounds(0, getHeight() - 100, getWidth(), 2*CELL_SIZE );
+        messageClick.setBounds(0, getHeight() - 100, getWidth(), 2 * CELL_SIZE);
         messageClick.setFont(new Font("Serif", Font.BOLD, 25));
         messageClick.setForeground(Color.MAGENTA);
         layeredPane.add(messageClick, MESSAGE_LAYER);
@@ -176,7 +181,8 @@ public class Window extends JFrame {
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.start();
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored){}
     }
+
 }
