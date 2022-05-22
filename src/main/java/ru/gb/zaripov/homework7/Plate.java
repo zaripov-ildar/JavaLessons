@@ -7,11 +7,13 @@ public class Plate {
         this.food = food;
     }
 
-    public void decreaseFood(int appetite) {
-//в проверке нет необходимости т.к. кот не будет есть если
-//ему мало, но такое задание
-        if (food >= appetite)
+    public boolean decreaseFood(int appetite) {
+        if (appetite < 0)
+            throw new ArithmeticException("appetite = " + appetite + ". It can't be < 0");
+        if (food >= appetite) {
             food -= appetite;
+            return true;
+        } else return false;
     }
 
     public void info() {
@@ -23,6 +25,8 @@ public class Plate {
     }
 
     public void addFood(int addedFood) {
+        if (addedFood < 0)
+            throw new ArithmeticException("addedFood = " + addedFood + ". It can't be < 0");
         food += addedFood;
     }
 }

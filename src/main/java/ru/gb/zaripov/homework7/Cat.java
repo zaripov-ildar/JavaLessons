@@ -6,15 +6,18 @@ public class Cat {
     private boolean isFull;
 
     public Cat(String name, int appetite) {
+        if (appetite < 0)
+            throw new ArithmeticException("appetite = " + appetite + ". It can't be < 0");
+        if (name.length()<2)
+            throw new RuntimeException("name have to contain 3 or more characters");
         this.name = name;
         this.appetite = appetite;
         this.isFull = false;
     }
 
     public void eat(Plate plate) {
-        if (plate.getFood() >= appetite) {
-            plate.decreaseFood(appetite);
-            isFull = true;
+        isFull = plate.decreaseFood(appetite);
+        if (isFull) {
             System.out.printf("%s съел %d единиц еды\n", name, appetite);
         } else {
             System.out.println("Недостаточно еды для " + name);
