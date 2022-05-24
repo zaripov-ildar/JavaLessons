@@ -1,4 +1,4 @@
-package ru.gb.zaripov.homework9.interfaceSolution;
+package ru.gb.zaripov.homework9.Athletes;
 
 public class Cat implements Athlete {
 
@@ -43,4 +43,12 @@ public class Cat implements Athlete {
         return jumpLimit;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Cat{");
+        sb.append("runLimit=").append(runLimit);
+        sb.append(", jumpLimit=").append(jumpLimit);
+        sb.append('}');
+        return sb.toString();
+    }
 }

@@ -1,12 +1,12 @@
-package ru.gb.zaripov.homework9.interfaceSolution;
+package ru.gb.zaripov.homework9.Athletes;
 
-public class Robot implements Athlete {
+public class Human implements Athlete {
 
     private boolean ableToContinue;
     private final int runLimit;
     private final int jumpLimit;
 
-    public Robot(int runLimit, int jumpLimit) {
+    public Human(int runLimit, int jumpLimit) {
         this.runLimit = runLimit;
         this.jumpLimit = jumpLimit;
         ableToContinue = true;
@@ -43,5 +43,12 @@ public class Robot implements Athlete {
         return jumpLimit;
     }
 
-
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Human{");
+        sb.append("runLimit=").append(runLimit);
+        sb.append(", jumpLimit=").append(jumpLimit);
+        sb.append('}');
+        return sb.toString();
+    }
 }

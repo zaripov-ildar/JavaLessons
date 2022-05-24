@@ -1,4 +1,4 @@
-package ru.gb.zaripov.homework9.interfaceSolution;
+package ru.gb.zaripov.homework9.Athletes;
 
 public interface Athlete {
 
@@ -15,4 +15,5 @@ public interface Athlete {
     int getRunLimit();
 
     int getJumpLimit();
+
 }

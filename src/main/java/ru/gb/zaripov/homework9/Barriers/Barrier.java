@@ -1,6 +1,9 @@
-package ru.gb.zaripov.homework9.enumSolution;
+package ru.gb.zaripov.homework9.Barriers;
+
+import ru.gb.zaripov.homework9.Athletes.Athlete;
 
 public abstract class Barrier {
+
     protected final int size;
 
     public Barrier(int size) {
@@ -8,5 +11,4 @@ public abstract class Barrier {
     }
 
     public abstract void cross(Athlete athlete);
-
 }
