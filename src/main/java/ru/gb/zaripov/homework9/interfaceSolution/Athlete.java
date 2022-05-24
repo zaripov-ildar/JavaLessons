@@ -12,7 +12,7 @@ public interface Athlete {
 
     void leaveCompetition();
 
-    int runLimit();
+    int getRunLimit();
 
-    int jumpLimit();
+    int getJumpLimit();
 }

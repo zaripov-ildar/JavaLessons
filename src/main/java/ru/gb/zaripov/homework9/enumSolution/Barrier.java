@@ -6,6 +6,7 @@ public abstract class Barrier {
     public Barrier(int size) {
         this.size = size;
     }
+
     public abstract void cross(Athlete athlete);
 
 }

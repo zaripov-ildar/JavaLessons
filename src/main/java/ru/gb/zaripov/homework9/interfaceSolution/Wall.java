@@ -8,7 +8,7 @@ public class Wall extends Barrier {
 
     @Override
     public void cross(Athlete athlete) {
-        if (athlete.jumpLimit()>= size)
+        if (athlete.getJumpLimit()>= size)
             athlete.jump(athlete.getClass().getSimpleName() + " успешно перепрыгнул");
         else {
             athlete.leaveCompetition();

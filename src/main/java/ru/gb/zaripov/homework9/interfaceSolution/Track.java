@@ -8,7 +8,7 @@ public class Track extends Barrier {
 
     @Override
     public void cross(Athlete athlete) {
-        if (athlete.runLimit() >= size)
+        if (athlete.getRunLimit() >= size)
             athlete.run(athlete.getClass().getSimpleName() + " успешно пробежал");
         else {
             athlete.leaveCompetition();

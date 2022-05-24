@@ -8,6 +8,7 @@ import ru.gb.zaripov.homework9.enumSolution.Wall;
 public class AppEnum {
 
     public static void main(String[] args) {
+
         Barrier[] barriers = {
                 new Wall(1),
                 new Track(100),

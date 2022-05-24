@@ -34,12 +34,12 @@ public class Cat implements Athlete {
     }
 
     @Override
-    public int runLimit() {
+    public int getRunLimit() {
         return runLimit;
     }
 
     @Override
-    public int jumpLimit() {
+    public int getJumpLimit() {
         return jumpLimit;
     }
 

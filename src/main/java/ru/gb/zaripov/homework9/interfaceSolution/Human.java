@@ -1,12 +1,12 @@
 package ru.gb.zaripov.homework9.interfaceSolution;
 
-public class Human  implements Athlete {
+public class Human implements Athlete {
 
     private boolean ableToContinue;
     private final int runLimit;
     private final int jumpLimit;
 
-    public Human (int runLimit, int jumpLimit) {
+    public Human(int runLimit, int jumpLimit) {
         this.runLimit = runLimit;
         this.jumpLimit = jumpLimit;
         ableToContinue = true;
@@ -34,12 +34,12 @@ public class Human  implements Athlete {
     }
 
     @Override
-    public int runLimit() {
+    public int getRunLimit() {
         return runLimit;
     }
 
     @Override
-    public int jumpLimit() {
+    public int getJumpLimit() {
         return jumpLimit;
     }
 
