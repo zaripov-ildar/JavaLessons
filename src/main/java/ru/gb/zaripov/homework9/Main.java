@@ -9,8 +9,6 @@ import ru.gb.zaripov.homework9.Barriers.Wall;
 public class Main {
     public static void main(String[] args) {
         Course course = new Course(
-                new Wall(1),
-                new Track(100),
                 new Wall(2),
                 new Track(500),
                 new Wall(3)

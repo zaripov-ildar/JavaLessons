@@ -45,10 +45,8 @@ public class Robot implements Athlete {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Robot{");
-        sb.append("runLimit=").append(runLimit);
-        sb.append(", jumpLimit=").append(jumpLimit);
-        sb.append('}');
-        return sb.toString();
+        return "Robot{" + "runLimit=" + runLimit +
+                ", jumpLimit=" + jumpLimit +
+                '}';
     }
 }

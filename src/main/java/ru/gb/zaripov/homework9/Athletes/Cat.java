@@ -45,10 +45,8 @@ public class Cat implements Athlete {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Cat{");
-        sb.append("runLimit=").append(runLimit);
-        sb.append(", jumpLimit=").append(jumpLimit);
-        sb.append('}');
-        return sb.toString();
+        return "Cat{" + "runLimit=" + runLimit +
+                ", jumpLimit=" + jumpLimit +
+                '}';
     }
 }

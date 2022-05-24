@@ -45,10 +45,8 @@ public class Human implements Athlete {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Human{");
-        sb.append("runLimit=").append(runLimit);
-        sb.append(", jumpLimit=").append(jumpLimit);
-        sb.append('}');
-        return sb.toString();
+        return "Human{" + "runLimit=" + runLimit +
+                ", jumpLimit=" + jumpLimit +
+                '}';
     }
 }
