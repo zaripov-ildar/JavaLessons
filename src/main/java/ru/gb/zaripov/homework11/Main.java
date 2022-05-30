@@ -5,7 +5,7 @@ public class Main {
 //        the first task
         System.out.println("The first task");
         String sentence = "Lorem ipsum dolor sit. Doloribus, debitis? Ipsum! Lorem ipsum dolor sit amet consectetur adipisicing elit";
-        String [] words = sentence.split("\\W+");
+        String[] words = sentence.split("\\W+");
         FirstTask firstTask = new FirstTask();
         firstTask.countUniqueWords(words);
 
@@ -21,7 +21,6 @@ public class Main {
 
         phoneBook.printNumberList("Shrike");
         phoneBook.printNumberList("Hoyt");
-
 
 
     }
