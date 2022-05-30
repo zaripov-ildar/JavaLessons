@@ -21,8 +21,5 @@ public class Main {
 
         phoneBook.printNumberList("Shrike");
         phoneBook.printNumberList("Hoyt");
-
-
     }
-
 }
