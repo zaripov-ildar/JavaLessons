@@ -12,9 +12,7 @@ public class Calculator extends Thread {
     @Override
     public void run() {
         for (int i = 0; i < arr.length; i++) {
-            int foo = index + i;
-            arr[i] = (float) (arr[i] * Math.sin(0.2f + foo / 5) * Math.cos(0.2f + foo
-                    / 5) * Math.cos(0.4f + foo / 2));
+            arr[i] = Main.formula(arr[i], i + index);
         }
     }
 
