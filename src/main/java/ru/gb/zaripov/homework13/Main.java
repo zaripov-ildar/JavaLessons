@@ -1,26 +1,27 @@
 package ru.gb.zaripov.homework13;
 
-import java.util.Arrays;
-
 public class Main {
-
     private final static int SIZE = 10_000_000;
-    private final static int HALF = SIZE / 2;
+    private static int THREADS_AMOUNT;
 
     public static void main(String[] args) throws InterruptedException {
+        int processors = Runtime.getRuntime().availableProcessors();
+        System.out.println("Available processors: " + processors);
         firstMethod();
-        secondMethod();
-//
+        for (int i = processors; i < 10000; i += 1000) {
+            THREADS_AMOUNT = i;
+            secondMethod();
+        }
     }
 
     private static void firstMethod() {
 
-        float[] arr = generateOnesFilledArray();
+        float[] arr = Tools.generateArrayFilledBy(SIZE, 1.0f);
 
         long startTime = System.currentTimeMillis();
 
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = formula(arr[i], i);
+            arr[i] = Tools.formula(arr[i], i);
         }
         System.out.println("One thread time: " + (System.currentTimeMillis() -
                 startTime) + " ms.");
@@ -28,43 +29,35 @@ public class Main {
 
     private static void secondMethod() throws InterruptedException {
 
-        float[] arr = generateOnesFilledArray();
+        float[] arr = Tools.generateArrayFilledBy(SIZE, 1.0f);
 
         long startTime = System.currentTimeMillis();
 
-        float[] left = new float[HALF];
-        float[] right = new float[HALF];
-        System.arraycopy(arr, 0, left, 0, HALF);
-        System.arraycopy(arr, HALF, right, 0, HALF);
+        Calculator[] calculators = new Calculator[THREADS_AMOUNT];
 
-        for (int i = 0; i < threadsAmount ; i++) {
-            new Calculator()
+        sliceAndStart(calculators, arr);
 
+        for (int i = 0; i < THREADS_AMOUNT; i++) {
+            calculators[i].join();
         }
 
-        Calculator calculator1 = new Calculator(left, 0);
-        Calculator calculator2 = new Calculator(right, HALF);
-        calculator1.start();
-        calculator2.start();
-        calculator1.join();
-        calculator2.join();
-
-        float[] mergedArr = new float[SIZE];
-        System.arraycopy(calculator1.getArr(), 0, mergedArr, 0, HALF);
-        System.arraycopy(calculator2.getArr(), 0, mergedArr, HALF, HALF);
-
-        System.out.println("Two thread time: " + (System.currentTimeMillis() -
+        float[] mergedArray = Tools.mergeArray(calculators);
+        System.out.println(THREADS_AMOUNT + " threads time: " + (System.currentTimeMillis() -
                 startTime) + " ms.");
     }
 
-    private static float[] generateOnesFilledArray() {
-        float[] arr = new float[SIZE];
-        Arrays.fill(arr, 1.0f);
-        return arr;
-    }
+    private static void sliceAndStart(Calculator[] calculators, float[] arr) {
+        int step = SIZE / THREADS_AMOUNT;
+        for (int i = 0; i < THREADS_AMOUNT; i++) {
+//         the  last slice can have another length if SIZE divided on THREADS_AMOUNT with remainder so
+            int to = i + 1 == THREADS_AMOUNT ? SIZE : (i + 1) * (SIZE / THREADS_AMOUNT);
+            int from = i * (SIZE / THREADS_AMOUNT);
+            int resultSize = to - from;
+            float[] slice = new float[resultSize];
+            System.arraycopy(arr, from, slice, 0, resultSize);
 
-    public static float formula(float arrElem, float i) {
-        return (float) (arrElem * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i
-                / 5) * Math.cos(0.4f + i / 2));
+            calculators[i] = new Calculator(slice, step * i);
+            calculators[i].start();
+        }
     }
 }

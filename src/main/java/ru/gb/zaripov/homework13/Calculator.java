@@ -12,7 +12,7 @@ public class Calculator extends Thread {
     @Override
     public void run() {
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = Main.formula(arr[i], i + index);
+            arr[i] = Tools.formula(arr[i], i + index);
         }
     }
 
