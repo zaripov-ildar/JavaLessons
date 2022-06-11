@@ -119,9 +119,6 @@ public class MessageOperator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        finally {
-            close();
-        }
     }
 
     private String getMsg() {
@@ -132,9 +129,6 @@ public class MessageOperator {
             return msg;
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
-            close();
         }
         return "Couldn't get a message";
     }
