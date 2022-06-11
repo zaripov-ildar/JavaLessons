@@ -114,10 +114,13 @@ public class MessageOperator {
 
     private String getMsg() {
         try {
-            return in.readUTF();
+            String msg = in.readUTF();
+            if(msg.contains("/end"))
+                return "/end";
+            return msg;
         } catch (IOException e) {
             e.printStackTrace();
-            return e.getMessage();
         }
+        return "Couldn't get a message";
     }
 }
