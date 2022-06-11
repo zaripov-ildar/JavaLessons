@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class MessageOperator {
@@ -27,19 +26,6 @@ public class MessageOperator {
 
     public boolean isAlive() {
         return isAlive;
-    }
-
-    private void join() {
-        try {
-            receivingThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        try {
-            sendingThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public void start() {

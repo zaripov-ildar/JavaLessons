@@ -8,7 +8,7 @@ public class Client {
         try (Socket socket = new Socket("localhost", 8089)) {
             MessageOperator clientService = new MessageOperator("Client", socket);
             clientService.start();
-            while (clientService.isAlive()){}
+            while (clientService.isAlive()) ;
             clientService.close();
         } catch (IOException e) {
             e.getStackTrace();

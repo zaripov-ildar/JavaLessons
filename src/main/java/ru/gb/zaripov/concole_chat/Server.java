@@ -12,7 +12,7 @@ public class Server {
             System.out.println("Клиент подключился");
             MessageOperator serverService = new MessageOperator("Server", socket);
             serverService.start();
-            while (serverService.isAlive()){}
+            while (serverService.isAlive()) ;
             serverService.close();
         } catch (IOException e) {
             e.getStackTrace();
