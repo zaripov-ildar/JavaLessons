@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class MessageOperator {
@@ -22,9 +23,10 @@ public class MessageOperator {
         initiateInAndOutStreams();
         receivingThread = getReceivingThread();
         sendingThread = getSendingThread();
-        start();
-        join();
-        close();
+    }
+
+    public boolean isAlive() {
+        return isAlive;
     }
 
     private void join() {
@@ -40,31 +42,34 @@ public class MessageOperator {
         }
     }
 
-    private void start() {
+    public void start() {
         receivingThread.start();
         sendingThread.start();
     }
 
-    private void close() {
-        try {
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void close() {
+        if (in != null)
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        if (out != null)
+            try {
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        if (socket != null)
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 
     private Thread getReceivingThread() {
-        return new Thread(() -> {
+        Thread receiver = new Thread(() -> {
             while (isAlive) {
                 String inputMsg;
                 inputMsg = getMsg();
@@ -75,10 +80,12 @@ public class MessageOperator {
                 System.out.println(inputMsg);
             }
         });
+        receiver.setDaemon(true);
+        return receiver;
     }
 
     private Thread getSendingThread() {
-        return new Thread(() -> {
+        Thread sender = new Thread(() -> {
             Scanner scanner = new Scanner(System.in);
             while (isAlive) {
                 String outputMsg = scanner.nextLine();
@@ -89,6 +96,8 @@ public class MessageOperator {
                 }
             }
         });
+        sender.setDaemon(true);
+        return sender;
     }
 
     private void initiateInAndOutStreams() {
@@ -110,16 +119,22 @@ public class MessageOperator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        finally {
+            close();
+        }
     }
 
     private String getMsg() {
         try {
             String msg = in.readUTF();
-            if(msg.contains("/end"))
+            if (msg.toLowerCase().contains("/end"))
                 return "/end";
             return msg;
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            close();
         }
         return "Couldn't get a message";
     }

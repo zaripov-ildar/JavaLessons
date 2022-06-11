@@ -6,7 +6,10 @@ import java.net.Socket;
 public class Client {
     public static void main(String[] args) {
         try (Socket socket = new Socket("localhost", 8089)) {
-            new MessageOperator("Client", socket);
+            MessageOperator clientService = new MessageOperator("Client", socket);
+            clientService.start();
+            while (clientService.isAlive()){}
+            clientService.close();
         } catch (IOException e) {
             e.getStackTrace();
         }

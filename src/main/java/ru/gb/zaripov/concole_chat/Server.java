@@ -10,7 +10,10 @@ public class Server {
             System.out.println("Сервер запущен, ожидаем подключения...");
             Socket socket = server.accept();
             System.out.println("Клиент подключился");
-            new MessageOperator("Server", socket);
+            MessageOperator serverService = new MessageOperator("Server", socket);
+            serverService.start();
+            while (serverService.isAlive()){}
+            serverService.close();
         } catch (IOException e) {
             e.getStackTrace();
         }
